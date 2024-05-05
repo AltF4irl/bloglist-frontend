@@ -1,21 +1,26 @@
 import { useState, forwardRef, useImperativeHandle } from 'react'
 
-const BlogForm = forwardRef(({
-    onBlogSubmit, 
-    title, 
-    author, 
-    url,
-    titleChange,
-    authorChange,
-    urlChange,
-}, refs) => {
+const BlogForm = forwardRef(({createBlog}, refs) => {
     const [blogFormVisible, setBlogFormVisible] = useState(false)
+    const [title, setTitle] = useState('')
+    const [author, setAuthor] = useState('')
+    const [url, setUrl] = useState('')
 
     const showWhenVisible = { display: blogFormVisible ? '' : 'none' }
     const hideWhenVisible = { display: blogFormVisible ? 'none' : '' }
 
     const toggleBlogFormVisbility = () => {
         setBlogFormVisible(!blogFormVisible)
+    }
+
+    const submitBlogHandler = (e) => {
+        e.preventDefault()
+        const blogObject = { title, author, url }
+        
+        createBlog(blogObject)
+        setTitle('')
+        setAuthor('')
+        setUrl('')
     }
 
     useImperativeHandle(refs, () => {
@@ -32,13 +37,13 @@ const BlogForm = forwardRef(({
             <div style={showWhenVisible}>
                 <h1>Create New</h1>
 
-                <form onSubmit={onBlogSubmit}>
+                <form onSubmit={submitBlogHandler}>
                     <div>
                         Title:
                         <input 
                         type='text'
                         value={title}
-                        onChange={titleChange}
+                        onChange={({target}) => setTitle(target.value)}
                         name='Title'
                         />
                     </div>
@@ -48,7 +53,7 @@ const BlogForm = forwardRef(({
                         <input 
                         type='text'
                         value={author}
-                        onChange={authorChange}
+                        onChange={({target}) => setAuthor(target.value)}
                         name='Author'
                         />
                     </div>
@@ -58,7 +63,7 @@ const BlogForm = forwardRef(({
                         <input 
                         type='text'
                         value={url}
-                        onChange={urlChange}
+                        onChange={({target}) => setUrl(target.value)}
                         name='Url'
                         />
                     </div>

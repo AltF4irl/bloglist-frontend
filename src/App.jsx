@@ -9,9 +9,6 @@ const App = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
-  const [title, setTitle] = useState('')
-  const [author, setAuthor] = useState('')
-  const [url, setUrl] = useState('')
   const [notification, setNotification] = useState({ message: null, class: '' })
   const blogFormRef = useRef()
 
@@ -53,21 +50,15 @@ const App = () => {
     }
   }
 
-  const onBlogSubmit = async (e) => {
-    e.preventDefault()
-    console.log(title, author, url)
-    const blog = { title, author, url }
+  const createBlog = async (blogObject) => {
     blogService.setToken(user.token)
-
+    
     try {
-      const createdBlog = await blogService.create(blog)
+      const createdBlog = await blogService.create(blogObject)
       blogFormRef.current.toggleBlogFormVisbility()
       setBlogs(blogs.concat(createdBlog))
-      setTitle('')
-      setAuthor('')
-      setUrl('')
       setNotification({
-        message: `A new blog ${blog.title} by ${blog.author} added`,
+        message: `A new blog ${blogObject.title} by ${blogObject.author} added`,
         class: 'notif'
       })
       setTimeout(() => {
@@ -82,9 +73,6 @@ const App = () => {
       setTimeout(() => {
         setNotification({message: null, class: ''})
       }, 5000)
-      setTitle('')
-      setAuthor('')
-      setUrl('')
     }
   }
 
@@ -146,14 +134,8 @@ const App = () => {
 
       <div>
         <BlogForm 
-        onBlogSubmit={onBlogSubmit} 
+        createBlog={createBlog} 
         ref={blogFormRef} 
-        title={title}
-        author={author}
-        url={url}
-        titleChange={({target}) => setTitle(target.value)}
-        authorChange={({target}) => setAuthor(target.value)}
-        urlChange={({target}) => setUrl(target.value)}
         />
 
         <hr style={{height: 10, border: 0}}></hr>
