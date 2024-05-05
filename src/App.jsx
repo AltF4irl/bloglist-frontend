@@ -1,7 +1,8 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Blog from './components/Blog'
 import blogService from './services/blogs'
 import loginService from './services/login'
+import BlogForm from './components/BlogForm'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
@@ -12,6 +13,7 @@ const App = () => {
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
   const [notification, setNotification] = useState({ message: null, class: '' })
+  const blogFormRef = useRef()
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
@@ -59,6 +61,7 @@ const App = () => {
 
     try {
       const createdBlog = await blogService.create(blog)
+      blogFormRef.current.toggleBlogFormVisbility()
       setBlogs(blogs.concat(createdBlog))
       setTitle('')
       setAuthor('')
@@ -142,43 +145,16 @@ const App = () => {
       <hr style={{height: 10, border: 0}}></hr>
 
       <div>
-        <h1>Create New</h1>
-
-        <form onSubmit={onBlogSubmit}>
-          <div>
-            Title:
-            <input 
-              type='text'
-              value={title}
-              onChange={({target}) => setTitle(target.value)}
-              name='Title'
-            />
-          </div>
-          
-          <div>
-            Author:
-            <input 
-              type='text'
-              value={author}
-              onChange={({target}) => setAuthor(target.value)}
-              name='Author'
-            />
-          </div>
-          
-          <div>
-            URL:
-            <input 
-              type='text'
-              value={url}
-              onChange={({target}) => setUrl(target.value)}
-              name='Url'
-            />
-          </div>
-
-          <br />
-
-          <button type='submit'>Create</button>
-        </form>
+        <BlogForm 
+        onBlogSubmit={onBlogSubmit} 
+        ref={blogFormRef} 
+        title={title}
+        author={author}
+        url={url}
+        titleChange={({target}) => setTitle(target.value)}
+        authorChange={({target}) => setAuthor(target.value)}
+        urlChange={({target}) => setUrl(target.value)}
+        />
 
         <hr style={{height: 10, border: 0}}></hr>
 
