@@ -52,11 +52,13 @@ const App = () => {
 
   const createBlog = async (blogObject) => {
     blogService.setToken(user.token)
-    
+
     try {
       const createdBlog = await blogService.create(blogObject)
       blogFormRef.current.toggleBlogFormVisbility()
       setBlogs(blogs.concat(createdBlog))
+      console.log(createdBlog)
+      console.log(typeof(createdBlog.user))
       setNotification({
         message: `A new blog ${blogObject.title} by ${blogObject.author} added`,
         class: 'notif'
@@ -141,7 +143,7 @@ const App = () => {
         <hr style={{height: 10, border: 0}}></hr>
 
         {blogs.map(blog =>
-          <Blog key={blog.id} blog={blog} />
+          <Blog key={blog.id} blog={blog} blogOwner={user.name} />
         )}
       </div>
       
