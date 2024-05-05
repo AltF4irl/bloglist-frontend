@@ -15,6 +15,7 @@ const App = () => {
   useEffect(() => {
     blogService.getAll().then(blogs =>
       setBlogs( blogs )
+      // console.log(blogs)
     )  
   }, [])
 
@@ -83,6 +84,23 @@ const App = () => {
     window.localStorage.removeItem('logedInUser')
   }
 
+  const changeBlog = async (id, changedBlog) => {
+    console.log("id", id, "chnagdblog", changedBlog)
+    try {
+      const returnedBlog = await blogService.update(id, changedBlog)
+      setBlogs(blogs.map(blog => blog.id === returnedBlog.id ? returnedBlog : blog))
+    } catch (err) {
+      console.log(err)
+      setNotification({
+        message: `Somthing went wrong`,
+        class: 'error'
+      })
+      setTimeout(() => {
+        setNotification({message: null, class: ''})
+      }, 5000)
+    }
+  }
+
   const notificationBanner = () => (
     <div className={notification.class}>{notification.message}</div>
   )
@@ -143,7 +161,7 @@ const App = () => {
         <hr style={{height: 10, border: 0}}></hr>
 
         {blogs.map(blog =>
-          <Blog key={blog.id} blog={blog} blogOwner={user.name} />
+          <Blog key={blog.id} blog={blog} blogOwner={user.name} changeBlog={changeBlog} />
         )}
       </div>
       
