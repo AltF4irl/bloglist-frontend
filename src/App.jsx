@@ -58,8 +58,6 @@ const App = () => {
       const createdBlog = await blogService.create(blogObject)
       blogFormRef.current.toggleBlogFormVisbility()
       setBlogs(blogs.concat(createdBlog))
-      console.log(createdBlog)
-      console.log(typeof(createdBlog.user))
       setNotification({
         message: `A new blog ${blogObject.title} by ${blogObject.author} added`,
         class: 'notif'
@@ -70,7 +68,7 @@ const App = () => {
     } catch (err) {
       console.log(err)
       setNotification({
-        message: `Somthing went wrong`,
+        message: `Something went wrong`,
         class: 'error'
       })
       setTimeout(() => {
@@ -84,21 +82,59 @@ const App = () => {
     window.localStorage.removeItem('logedInUser')
   }
 
-  const changeBlog = async (id, changedBlog) => {
+  const changeBlog = async (id, changedBlog, blogCreator) => {
     console.log("id", id, "chnagdblog", changedBlog)
     try {
       const returnedBlog = await blogService.update(id, changedBlog)
-      setBlogs(blogs.map(blog => blog.id === returnedBlog.id ? returnedBlog : blog))
+      const returnedBlogv2 = {
+        id: id,
+        author: returnedBlog.author,
+        likes: returnedBlog.likes,
+        title: returnedBlog.title,
+        url: returnedBlog.url,
+        user: {
+          id: returnedBlog.user.id,
+          name: blogCreator
+        }
+      }
+      setBlogs(blogs.map(blog => blog.id === returnedBlog.id ? returnedBlogv2 : blog))
     } catch (err) {
       console.log(err)
       setNotification({
-        message: `Somthing went wrong`,
+        message: `Something went wrong`,
         class: 'error'
       })
       setTimeout(() => {
         setNotification({message: null, class: ''})
       }, 5000)
     }
+  }
+
+  const deleteBlog = async (id) => {
+
+    blogService.setToken(user.token)
+
+    try {
+      await blogService.remove(id)
+      setBlogs(blogs.filter(blog => blog.id !== id))
+      setNotification({
+        message: `Blog Deleted Successfully`,
+        class: 'notif'
+      })
+      setTimeout(() => {
+        setNotification({message: null, class: ''})
+      }, 5000)
+    } catch (err) {
+      console.log(err)
+      setNotification({
+        message: `Something went wrong`,
+        class: 'error'
+      })
+      setTimeout(() => {
+        setNotification({message: null, class: ''})
+      }, 5000)
+    }
+    
   }
 
   const notificationBanner = () => (
@@ -161,7 +197,7 @@ const App = () => {
         <hr style={{height: 10, border: 0}}></hr>
 
         {blogs.map(blog =>
-          <Blog key={blog.id} blog={blog} blogOwner={user.name} changeBlog={changeBlog} />
+          <Blog key={blog.id} blog={blog} currentUser={user.name} changeBlog={changeBlog} deleteBlog={deleteBlog} />
         )}
       </div>
       
