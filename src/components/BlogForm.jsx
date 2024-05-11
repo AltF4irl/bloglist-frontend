@@ -45,6 +45,7 @@ const BlogForm = forwardRef(({createBlog}, refs) => {
                         value={title}
                         onChange={({target}) => setTitle(target.value)}
                         name='Title'
+                        placeholder='Title'
                         />
                     </div>
                     
@@ -55,6 +56,7 @@ const BlogForm = forwardRef(({createBlog}, refs) => {
                         value={author}
                         onChange={({target}) => setAuthor(target.value)}
                         name='Author'
+                        placeholder='Author'
                         />
                     </div>
                     
@@ -65,6 +67,7 @@ const BlogForm = forwardRef(({createBlog}, refs) => {
                         value={url}
                         onChange={({target}) => setUrl(target.value)}
                         name='Url'
+                        placeholder='Url'
                         />
                     </div>
 
