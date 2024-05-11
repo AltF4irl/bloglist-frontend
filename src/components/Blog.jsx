@@ -32,7 +32,7 @@ const Blog = ({ blog, currentUser, changeBlog, deleteBlog }) => {
         {blog.title} | {blog.author}
       </span>
       <button onClick={toggleBlogVisibility}>{blogVisible ? 'hide' : 'view'}</button>
-      <div style={showWhenVisible}>
+      <div style={showWhenVisible} className='dropdownElement'>
         {blog.url} <br />
         {blog.likes}
         <button onClick={likeHandler}>Like</button> <br />
