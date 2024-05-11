@@ -29,7 +29,7 @@ describe('blog post', () => {
         const div = container.querySelector('.dropdownElement')
         expect(div).toHaveStyle('display: none')
 
-        screen.debug()
+        // screen.debug()
     })
   
     // test('at start the children are not displayed', () => {
@@ -37,12 +37,18 @@ describe('blog post', () => {
     //   expect(div).toHaveStyle('display: none')
     // })
   
-    // test('after clicking the button, children are displayed', async () => {
-    //   const user = userEvent.setup()
-    //   const button = screen.getByText('show...')
-    //   await user.click(button)
+    test('after clicking the button url and likes are shown', async () => {
+      const user = userEvent.setup()
+      const button = screen.getByText('view')
+      await user.click(button)
+
+      await screen.findByText(`${blog.url}`)
+      await screen.findByText(`${blog.likes}`)
+
+
+      screen.debug()
   
-    //   const div = container.querySelector('.togglableContent')
-    //   expect(div).not.toHaveStyle('display: none')
-    // })
+      const div = container.querySelector('.dropdownElement')
+      expect(div).not.toHaveStyle('display: none')
+    })
   })

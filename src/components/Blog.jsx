@@ -33,8 +33,8 @@ const Blog = ({ blog, currentUser, changeBlog, deleteBlog }) => {
       </span>
       <button onClick={toggleBlogVisibility}>{blogVisible ? 'hide' : 'view'}</button>
       <div style={showWhenVisible} className='dropdownElement'>
-        {blog.url} <br />
-        {blog.likes}
+        <span>{blog.url}</span><br />
+        <span>{blog.likes}</span>
         <button onClick={likeHandler}>Like</button> <br />
         {blog.user.name} <br />
         {currentUser === blog.user.name && <button onClick={removeBlogHandler} >Remove</button>}    
