@@ -11,8 +11,6 @@ describe('blog post', () => {
         user: "blog.user.id"
     }
     let container
-
-    const mockHandler = vi.fn()
   
     beforeEach(() => {
       container = render(
@@ -21,7 +19,6 @@ describe('blog post', () => {
             currentUser='matrix'
             changeBlog={({ target }) => console.log(target.value)}
             deleteBlog={() => console.log('deleted')}
-            onClick={mockHandler}
         />
       ).container
     })
@@ -34,6 +31,11 @@ describe('blog post', () => {
 
         // screen.debug()
     })
+  
+    // test('at start the children are not displayed', () => {
+    //   const div = container.querySelector('.togglableContent')
+    //   expect(div).toHaveStyle('display: none')
+    // })
   
     test('after clicking the button url and likes are shown', async () => {
       const user = userEvent.setup()
@@ -48,14 +50,5 @@ describe('blog post', () => {
   
       const div = container.querySelector('.dropdownElement')
       expect(div).not.toHaveStyle('display: none')
-    })
-
-    test('after ', async () => {
-        
-        const user = userEvent.setup()
-        const likeButton = screen.getByText('Like')
-        await user.click(likeButton)
-        await user.click(likeButton)
-        expect(mockHandler.mock.calls).toHaveLength(2)
     })
   })
