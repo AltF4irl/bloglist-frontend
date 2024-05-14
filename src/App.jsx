@@ -56,8 +56,19 @@ const App = () => {
 
     try {
       const createdBlog = await blogService.create(blogObject)
+      const createdBlogWithNname = {
+        author: createdBlog.author,
+        id: createdBlog.id,
+        likes: createdBlog.likes,
+        title: createdBlog.title,
+        user: {
+          id: createdBlog.user,
+          name: user.name
+        }
+      }
+      console.log("created blog", createdBlogWithNname)
       blogFormRef.current.toggleBlogFormVisbility()
-      setBlogs(blogs.concat(createdBlog))
+      setBlogs(blogs.concat(createdBlogWithNname))
       setNotification({
         message: `A new blog ${blogObject.title} by ${blogObject.author} added`,
         class: 'notif'
@@ -152,6 +163,7 @@ const App = () => {
           <div>
             Username
             <input 
+              data-testid='username'
               type='text'
               value={username}
               onChange={({ target }) => setUsername(target.value)}
@@ -161,6 +173,7 @@ const App = () => {
           <div>
             Password
             <input 
+              data-testid='password'
               type='password'
               value={password}
               onChange={({target}) => setPassword(target.value)}

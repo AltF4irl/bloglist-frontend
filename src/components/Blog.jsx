@@ -28,7 +28,7 @@ const Blog = ({ blog, currentUser, changeBlog, deleteBlog, /*onClick*/ }) => { /
 
   return (
     <div className='blog'>
-      <span style={{fontWeight: 'bold'}}>
+      <span data-testid='blogheader' style={{fontWeight: 'bold'}}>
         {blog.title} | {blog.author}
       </span>
       <button onClick={toggleBlogVisibility}>{blogVisible ? 'hide' : 'view'}</button>
