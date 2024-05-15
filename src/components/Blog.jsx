@@ -34,7 +34,7 @@ const Blog = ({ blog, currentUser, changeBlog, deleteBlog, /*onClick*/ }) => { /
       <button onClick={toggleBlogVisibility}>{blogVisible ? 'hide' : 'view'}</button>
       <div style={showWhenVisible} className='dropdownElement'>
         <span>{blog.url}</span><br />
-        <span>{blog.likes}</span>
+        <span className='likes'>{blog.likes}</span>
         <button onClick={likeHandler}>Like</button> <br /> 
         {/* <button onClick={onClick}>Like</button> <br /> //for testing only */}
         {blog.user.name} <br />
