@@ -5,18 +5,19 @@ import loginService from './services/login'
 import BlogForm from './components/BlogForm'
 import { useDispatch, useSelector } from 'react-redux'
 import { initializeBlogs, createNewBlog } from './reducers/blogReducer'
+import { throwNotification } from './reducers/notificationReducer'
 
 const App = () => {
-  // const [blogs, setBlogs] = useState([])
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
-  const [notification, setNotification] = useState({ message: null, class: '' })
   const blogFormRef = useRef()
   const dispatch = useDispatch()
 
   const blogs = useSelector((state) => state.blogs)
   console.log(blogs)
+
+  const notification = useSelector((state) => state.notification)
 
   useEffect(() => {
     dispatch(initializeBlogs())
@@ -41,50 +42,38 @@ const App = () => {
       setUsername('')
       setPassword('')
     } catch (err) {
-      setNotification({
-        message: `Wrong Username or Password`,
-        class: 'error',
-      })
-      setTimeout(() => {
-        setNotification({ message: null, class: '' })
-      }, 5000)
-      console.log('wrong credentials')
-      setUsername('')
-      setPassword('')
+      // setNotification({
+      //   message: `Wrong Username or Password`,
+      //   class: 'error',
+      // })
+      // setTimeout(() => {
+      //   setNotification({ message: null, class: '' })
+      // }, 5000)
+      // console.log('wrong credentials')
+      // setUsername('')
+      // setPassword('')
+      console.log(err)
     }
   }
 
   const createBlog = async (blogObject) => {
     blogService.setToken(user.token)
 
-    try {
-      const blogWithNname = {
-        author: blogObject.author,
-        title: blogObject.title,
-        url: blogObject.url,
-        user: {
-          name: user.name,
-        },
-      }
-      blogFormRef.current.toggleBlogFormVisbility()
-      dispatch(createNewBlog(blogWithNname))
-      setNotification({
-        message: `A new blog ${blogObject.title} by ${blogObject.author} added`,
-        class: 'notif',
-      })
-      setTimeout(() => {
-        setNotification({ message: null, class: '' })
-      }, 5000)
-    } catch (err) {
-      console.log(err)
-      setNotification({
-        message: `Something went wrong`,
-        class: 'error',
-      })
-      setTimeout(() => {
-        setNotification({ message: null, class: '' })
-      }, 5000)
+    const blogWithNname = {
+      author: blogObject.author,
+      title: blogObject.title,
+      url: blogObject.url,
+      user: {
+        name: user.name,
+      },
     }
+    blogFormRef.current.toggleBlogFormVisbility()
+    dispatch(createNewBlog(
+      blogWithNname,
+      `A new blog ${blogObject.title} by ${blogObject.author} added`,
+      'Something went wrong'
+    ))
+    // dispatch(throwNotification(`A new blog ${blogObject.title} by ${blogObject.author} added`))
   }
 
   const onLogoutClick = () => {
