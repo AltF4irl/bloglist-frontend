@@ -1,9 +1,10 @@
 import { useState } from 'react'
 import PropTypes from 'prop-types'
 
-const Blog = ({ blog, currentUser, changeBlog, deleteBlog, /*onClick*/ }) => { //on click only for testing
+const Blog = ({ blog, currentUser, changeBlog, deleteBlog /*onClick*/ }) => {
+  //on click only for testing
   const [blogVisible, setBlogVisible] = useState(false)
-  
+
   const showWhenVisible = { display: blogVisible ? '' : 'none' }
 
   const toggleBlogVisibility = () => {
@@ -16,7 +17,7 @@ const Blog = ({ blog, currentUser, changeBlog, deleteBlog, /*onClick*/ }) => { /
       likes: blog.likes + 1,
       title: blog.title,
       url: blog.url,
-      user: blog.user.id
+      user: blog.user.id,
     }
 
     changeBlog(blog.id, changedBlog, blog.user.name)
@@ -27,20 +28,31 @@ const Blog = ({ blog, currentUser, changeBlog, deleteBlog, /*onClick*/ }) => { /
   }
 
   return (
-    <div className='blog'>
-      <span data-testid='blogheader' style={{fontWeight: 'bold'}}>
+    <div className="blog">
+      <span
+        data-testid="blogheader"
+        style={{ fontWeight: 'bold' }}
+      >
         {blog.title} | {blog.author}
       </span>
-      <button onClick={toggleBlogVisibility}>{blogVisible ? 'hide' : 'view'}</button>
-      <div style={showWhenVisible} className='dropdownElement'>
-        <span>{blog.url}</span><br />
-        <span className='likes'>{blog.likes}</span>
-        <button onClick={likeHandler}>Like</button> <br /> 
+      <button onClick={toggleBlogVisibility}>
+        {blogVisible ? 'hide' : 'view'}
+      </button>
+      <div
+        style={showWhenVisible}
+        className="dropdownElement"
+      >
+        <span>{blog.url}</span>
+        <br />
+        <span className="likes">{blog.likes}</span>
+        <button onClick={likeHandler}>Like</button> <br />
         {/* <button onClick={onClick}>Like</button> <br /> //for testing only */}
         {blog.user.name} <br />
-        {currentUser === blog.user.name && <button onClick={removeBlogHandler} >Remove</button>}    
+        {currentUser === blog.user.name && (
+          <button onClick={removeBlogHandler}>Remove</button>
+        )}
       </div>
-    </div>  
+    </div>
   )
 }
 
@@ -48,7 +60,7 @@ Blog.propTypes = {
   blog: PropTypes.object.isRequired,
   currentUser: PropTypes.string.isRequired,
   changeBlog: PropTypes.func.isRequired,
-  deleteBlog: PropTypes.func.isRequired
+  deleteBlog: PropTypes.func.isRequired,
 }
 
 export default Blog

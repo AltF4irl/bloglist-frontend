@@ -13,10 +13,10 @@ const App = () => {
   const blogFormRef = useRef()
 
   useEffect(() => {
-    blogService.getAll().then(blogs => {
+    blogService.getAll().then((blogs) => {
       const sortedBlogs = blogs.sort((a, b) => b.likes - a.likes)
-      setBlogs( sortedBlogs )
-  })  
+      setBlogs(sortedBlogs)
+    })
   }, [])
 
   useEffect(() => {
@@ -40,10 +40,10 @@ const App = () => {
     } catch (err) {
       setNotification({
         message: `Wrong Username or Password`,
-        class: 'error'
+        class: 'error',
       })
       setTimeout(() => {
-        setNotification({message: null, class: ''})
+        setNotification({ message: null, class: '' })
       }, 5000)
       console.log('wrong credentials')
       setUsername('')
@@ -63,27 +63,27 @@ const App = () => {
         title: createdBlog.title,
         user: {
           id: createdBlog.user,
-          name: user.name
-        }
+          name: user.name,
+        },
       }
-      console.log("created blog", createdBlogWithNname)
+      console.log('created blog', createdBlogWithNname)
       blogFormRef.current.toggleBlogFormVisbility()
       setBlogs(blogs.concat(createdBlogWithNname))
       setNotification({
         message: `A new blog ${blogObject.title} by ${blogObject.author} added`,
-        class: 'notif'
+        class: 'notif',
       })
       setTimeout(() => {
-        setNotification({message: null, class: ''})
+        setNotification({ message: null, class: '' })
       }, 5000)
     } catch (err) {
       console.log(err)
       setNotification({
         message: `Something went wrong`,
-        class: 'error'
+        class: 'error',
       })
       setTimeout(() => {
-        setNotification({message: null, class: ''})
+        setNotification({ message: null, class: '' })
       }, 5000)
     }
   }
@@ -94,7 +94,7 @@ const App = () => {
   }
 
   const changeBlog = async (id, changedBlog, blogCreator) => {
-    console.log("id", id, "chnagdblog", changedBlog)
+    console.log('id', id, 'chnagdblog', changedBlog)
     try {
       const returnedBlog = await blogService.update(id, changedBlog)
       const returnedBlogv2 = {
@@ -105,47 +105,49 @@ const App = () => {
         url: returnedBlog.url,
         user: {
           id: returnedBlog.user.id,
-          name: blogCreator
-        }
+          name: blogCreator,
+        },
       }
-      setBlogs(blogs.map(blog => blog.id === returnedBlog.id ? returnedBlogv2 : blog))
+      setBlogs(
+        blogs.map((blog) =>
+          blog.id === returnedBlog.id ? returnedBlogv2 : blog
+        )
+      )
     } catch (err) {
       console.log(err)
       setNotification({
         message: `Something went wrong`,
-        class: 'error'
+        class: 'error',
       })
       setTimeout(() => {
-        setNotification({message: null, class: ''})
+        setNotification({ message: null, class: '' })
       }, 5000)
     }
   }
 
   const deleteBlog = async (id) => {
-
     blogService.setToken(user.token)
 
     try {
       await blogService.remove(id)
-      setBlogs(blogs.filter(blog => blog.id !== id))
+      setBlogs(blogs.filter((blog) => blog.id !== id))
       setNotification({
         message: `Blog Deleted Successfully`,
-        class: 'notif'
+        class: 'notif',
       })
       setTimeout(() => {
-        setNotification({message: null, class: ''})
+        setNotification({ message: null, class: '' })
       }, 5000)
     } catch (err) {
       console.log(err)
       setNotification({
         message: `Something went wrong`,
-        class: 'error'
+        class: 'error',
       })
       setTimeout(() => {
-        setNotification({message: null, class: ''})
+        setNotification({ message: null, class: '' })
       }, 5000)
     }
-    
   }
 
   const notificationBanner = () => (
@@ -162,25 +164,25 @@ const App = () => {
         <form onSubmit={onLoginSubmit}>
           <div>
             Username
-            <input 
-              data-testid='username'
-              type='text'
+            <input
+              data-testid="username"
+              type="text"
               value={username}
               onChange={({ target }) => setUsername(target.value)}
-              name='Username'
+              name="Username"
             />
           </div>
           <div>
             Password
-            <input 
-              data-testid='password'
-              type='password'
+            <input
+              data-testid="password"
+              type="password"
               value={password}
-              onChange={({target}) => setPassword(target.value)}
-              name='Password'
+              onChange={({ target }) => setPassword(target.value)}
+              name="Password"
             />
           </div>
-          <button type='submit'>Login</button>
+          <button type="submit">Login</button>
         </form>
       </div>
     )
@@ -190,30 +192,35 @@ const App = () => {
     <div>
       <h2>Blogs</h2>
 
-      <hr style={{height: 10, border: 0}}></hr>
-      
+      <hr style={{ height: 10, border: 0 }}></hr>
+
       {notification.message !== null && notificationBanner()}
-      
+
       <div>
         Logged in with {user.name}
         <button onClick={onLogoutClick}>Logout</button>
       </div>
 
-      <hr style={{height: 10, border: 0}}></hr>
+      <hr style={{ height: 10, border: 0 }}></hr>
 
       <div>
-        <BlogForm 
-        createBlog={createBlog} 
-        ref={blogFormRef} 
+        <BlogForm
+          createBlog={createBlog}
+          ref={blogFormRef}
         />
 
-        <hr style={{height: 10, border: 0}}></hr>
+        <hr style={{ height: 10, border: 0 }}></hr>
 
-        {blogs.map(blog =>
-          <Blog key={blog.id} blog={blog} currentUser={user.name} changeBlog={changeBlog} deleteBlog={deleteBlog} />
-        )}
+        {blogs.map((blog) => (
+          <Blog
+            key={blog.id}
+            blog={blog}
+            currentUser={user.name}
+            changeBlog={changeBlog}
+            deleteBlog={deleteBlog}
+          />
+        ))}
       </div>
-      
     </div>
   )
 }
