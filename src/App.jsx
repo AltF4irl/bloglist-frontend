@@ -1,17 +1,16 @@
-import { useEffect } from 'react'
-import BlogForm from './components/BlogForm'
-import { useDispatch, useSelector } from 'react-redux'
-import { setUser } from './reducers/userReducer'
-import NotificationBanner from './components/NotificationBanner'
+import { Route, Routes } from 'react-router-dom'
 import LoginForm from './components/LoginForm'
-import BlogList from './components/BlogList'
+import Homepage from './views/Homepage'
+import { useDispatch, useSelector } from 'react-redux'
 import LogoutBanner from './components/LogoutBanner'
+import { useEffect } from 'react'
+import { setUser } from './reducers/logedUserReducer'
+import Userspage from './views/Userspage'
 
 const App = () => {
-  const dispatch = useDispatch()
+  const user = useSelector((state) => state.logedUser)
 
-  const notification = useSelector((state) => state.notification)
-  const user = useSelector((state) => state.users)
+  const dispatch = useDispatch()
 
   useEffect(() => {
     const logedUserJSON = window.localStorage.getItem('logedInUser')
@@ -27,21 +26,17 @@ const App = () => {
 
   return (
     <div>
-      <h2>Blogs</h2>
-
-      <hr style={{ height: 10, border: 0 }}></hr>
-
-      {notification.message !== null && <NotificationBanner />}
-
       <LogoutBanner />
-
-      <hr style={{ height: 10, border: 0 }}></hr>
-
-      <div>
-        <BlogForm />
-        <hr style={{ height: 10, border: 0 }}></hr>
-        <BlogList />
-      </div>
+      <Routes>
+        <Route
+          path="/users"
+          element={<Userspage />}
+        />
+        <Route 
+          path='/'
+          element={<Homepage />} 
+        />
+      </Routes>
     </div>
   )
 }

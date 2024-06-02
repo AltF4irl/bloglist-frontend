@@ -8,7 +8,7 @@ const BlogForm = () => {
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
-  const user = useSelector((state) => state.users)
+  const user = useSelector((state) => state.logedUser)
 
   const dispatch = useDispatch()
 

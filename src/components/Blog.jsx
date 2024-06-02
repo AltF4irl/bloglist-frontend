@@ -8,7 +8,7 @@ const Blog = ({ blog /*onClick*/ }) => {
   //on click only for testing
   const [blogVisible, setBlogVisible] = useState(false)
   const showWhenVisible = { display: blogVisible ? '' : 'none' }
-  const user = useSelector((state) => state.users)
+  const user = useSelector((state) => state.logedUser)
 
   const dispatch = useDispatch()
 

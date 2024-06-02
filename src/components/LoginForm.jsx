@@ -1,6 +1,6 @@
 import NotificationBanner from './NotificationBanner'
 import loginService from '../services/login'
-import { setUser } from '../reducers/userReducer'
+import { setUser } from '../reducers/logedUserReducer'
 import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
