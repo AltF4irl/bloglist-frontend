@@ -8,7 +8,7 @@ const UserList = () => {
 
   useEffect(() => {
     dispatch(initializeUsers())
-  })
+  }, [])
 
   return (
     <div>
