@@ -20,11 +20,12 @@ const blogSlice = createSlice({
       return state.filter((blog) => blog.id !== action.payload)
     },
     likeAction(state, action) {
-      console.log('action pauload like', action.payload, "state", state)
-      return state.map((blog) =>
-        blog.id === action.payload.id
-          ? { ...blog, likes: action.payload.likes }
-          : blog
+      return orderBlogs(
+        state.map((blog) =>
+          blog.id === action.payload.id
+            ? { ...blog, likes: action.payload.likes }
+            : blog
+        )
       )
     },
   },
@@ -56,7 +57,12 @@ export const createNewBlog = (blog, notification, error) => {
   return async (dispatch) => {
     try {
       const addedBlog = await blogService.create(blog)
-      dispatch(appendBlog(addedBlog))
+      dispatch(
+        appendBlog({
+          ...addedBlog,
+          user: { name: blog.user.name, id: addedBlog.user },
+        })
+      )
       dispatch(throwNotification(notification))
     } catch (err) {
       dispatch(throwError(error))
@@ -67,7 +73,6 @@ export const createNewBlog = (blog, notification, error) => {
 export const likeBlog = (id, blog, blogCreator, notification, error) => {
   return async (dispatch) => {
     try {
-      console.log('likeblog blog argument', blog)
       const likedBlog = await blogService.update(id, blog)
       const likedBlogithUser = {
         id: likedBlog.id,
@@ -80,7 +85,6 @@ export const likeBlog = (id, blog, blogCreator, notification, error) => {
           name: blogCreator,
         },
       }
-      console.log('blog after edit request', likedBlogithUser)
       dispatch(likeAction(likedBlogithUser))
       dispatch(throwNotification(notification))
     } catch (err) {
