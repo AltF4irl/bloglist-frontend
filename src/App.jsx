@@ -3,20 +3,23 @@ import Blog from './components/Blog'
 import blogService from './services/blogs'
 import loginService from './services/login'
 import BlogForm from './components/BlogForm'
+import { useDispatch, useSelector } from 'react-redux'
+import { initializeBlogs, createNewBlog } from './reducers/blogReducer'
 
 const App = () => {
-  const [blogs, setBlogs] = useState([])
+  // const [blogs, setBlogs] = useState([])
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
   const [notification, setNotification] = useState({ message: null, class: '' })
   const blogFormRef = useRef()
+  const dispatch = useDispatch()
+
+  const blogs = useSelector((state) => state.blogs)
+  console.log(blogs)
 
   useEffect(() => {
-    blogService.getAll().then((blogs) => {
-      const sortedBlogs = blogs.sort((a, b) => b.likes - a.likes)
-      setBlogs(sortedBlogs)
-    })
+    dispatch(initializeBlogs())
   }, [])
 
   useEffect(() => {
@@ -55,20 +58,16 @@ const App = () => {
     blogService.setToken(user.token)
 
     try {
-      const createdBlog = await blogService.create(blogObject)
-      const createdBlogWithNname = {
-        author: createdBlog.author,
-        id: createdBlog.id,
-        likes: createdBlog.likes,
-        title: createdBlog.title,
+      const blogWithNname = {
+        author: blogObject.author,
+        title: blogObject.title,
+        url: blogObject.url,
         user: {
-          id: createdBlog.user,
           name: user.name,
         },
       }
-      console.log('created blog', createdBlogWithNname)
       blogFormRef.current.toggleBlogFormVisbility()
-      setBlogs(blogs.concat(createdBlogWithNname))
+      dispatch(createNewBlog(blogWithNname))
       setNotification({
         message: `A new blog ${blogObject.title} by ${blogObject.author} added`,
         class: 'notif',
@@ -93,62 +92,62 @@ const App = () => {
     window.localStorage.removeItem('logedInUser')
   }
 
-  const changeBlog = async (id, changedBlog, blogCreator) => {
-    console.log('id', id, 'chnagdblog', changedBlog)
-    try {
-      const returnedBlog = await blogService.update(id, changedBlog)
-      const returnedBlogv2 = {
-        id: id,
-        author: returnedBlog.author,
-        likes: returnedBlog.likes,
-        title: returnedBlog.title,
-        url: returnedBlog.url,
-        user: {
-          id: returnedBlog.user.id,
-          name: blogCreator,
-        },
-      }
-      setBlogs(
-        blogs.map((blog) =>
-          blog.id === returnedBlog.id ? returnedBlogv2 : blog
-        )
-      )
-    } catch (err) {
-      console.log(err)
-      setNotification({
-        message: `Something went wrong`,
-        class: 'error',
-      })
-      setTimeout(() => {
-        setNotification({ message: null, class: '' })
-      }, 5000)
-    }
-  }
+  // const changeBlog = async (id, changedBlog, blogCreator) => {
+  //   console.log('id', id, 'chnagdblog', changedBlog)
+  //   try {
+  //     const returnedBlog = await blogService.update(id, changedBlog)
+  //     const returnedBlogv2 = {
+  //       id: id,
+  //       author: returnedBlog.author,
+  //       likes: returnedBlog.likes,
+  //       title: returnedBlog.title,
+  //       url: returnedBlog.url,
+  //       user: {
+  //         id: returnedBlog.user.id,
+  //         name: blogCreator,
+  //       },
+  //     }
+  //     setBlogs(
+  //       blogs.map((blog) =>
+  //         blog.id === returnedBlog.id ? returnedBlogv2 : blog
+  //       )
+  //     )
+  //   } catch (err) {
+  //     console.log(err)
+  //     setNotification({
+  //       message: `Something went wrong`,
+  //       class: 'error',
+  //     })
+  //     setTimeout(() => {
+  //       setNotification({ message: null, class: '' })
+  //     }, 5000)
+  //   }
+  // }
 
-  const deleteBlog = async (id) => {
-    blogService.setToken(user.token)
+  // const deleteBlog = async (id) => {
+  //   blogService.setToken(user.token)
 
-    try {
-      await blogService.remove(id)
-      setBlogs(blogs.filter((blog) => blog.id !== id))
-      setNotification({
-        message: `Blog Deleted Successfully`,
-        class: 'notif',
-      })
-      setTimeout(() => {
-        setNotification({ message: null, class: '' })
-      }, 5000)
-    } catch (err) {
-      console.log(err)
-      setNotification({
-        message: `Something went wrong`,
-        class: 'error',
-      })
-      setTimeout(() => {
-        setNotification({ message: null, class: '' })
-      }, 5000)
-    }
-  }
+  //   try {
+  //     await blogService.remove(id)
+  //     setBlogs(blogs.filter((blog) => blog.id !== id))
+  //     setNotification({
+  //       message: `Blog Deleted Successfully`,
+  //       class: 'notif',
+  //     })
+  //     setTimeout(() => {
+  //       setNotification({ message: null, class: '' })
+  //     }, 5000)
+  //   } catch (err) {
+  //     console.log(err)
+  //     setNotification({
+  //       message: `Something went wrong`,
+  //       class: 'error',
+  //     })
+  //     setTimeout(() => {
+  //       setNotification({ message: null, class: '' })
+  //     }, 5000)
+  //   }
+  // }
 
   const notificationBanner = () => (
     <div className={notification.class}>{notification.message}</div>
@@ -216,8 +215,8 @@ const App = () => {
             key={blog.id}
             blog={blog}
             currentUser={user.name}
-            changeBlog={changeBlog}
-            deleteBlog={deleteBlog}
+            // changeBlog={changeBlog}
+            // deleteBlog={deleteBlog}
           />
         ))}
       </div>
