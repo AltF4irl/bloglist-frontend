@@ -9,26 +9,27 @@ import LoginForm from './components/LoginForm'
 import Homepage from './views/Homepage'
 import LogoutBanner from './components/LogoutBanner'
 import IndividualUserPage from './views/IndividualUserPage'
+import IndividualBlogPage from './views/IndividualBlogPage'
 
 const App = () => {
-  const user = useSelector((state) => state.logedUser)
-  const blogs = useSelector((state) => state.blogs)
-  const users = useSelector((state) => state.users)
-  const dispatch = useDispatch()
-  const match = useMatch('/users/:id')
-  console.log('blogs', blogs)
-
-  const userBlogs = match
-    ? blogs.filter((blog) => blog.user.id === match.params.id)
-    : null
-
-  const blogUser = match
-    ? users.find((user) => user.id === match.params.id)
-    : null
-
   useEffect(() => {
     dispatch(initializeBlogs())
   }, [])
+
+  const user = useSelector((state) => state.logedUser)
+  const blogs = useSelector((state) => state.blogs)
+  console.log('blogs', blogs)
+  const users = useSelector((state) => state.users)
+  const dispatch = useDispatch()
+  const userMatch = useMatch('/users/:id')
+
+  const userBlogs = userMatch
+    ? blogs.filter((blog) => blog.user.id === userMatch.params.id)
+    : null
+
+  const blogUser = userMatch
+    ? users.find((user) => user.id === userMatch.params.id)
+    : null
 
   useEffect(() => {
     const logedUserJSON = window.localStorage.getItem('logedInUser')
@@ -62,6 +63,10 @@ const App = () => {
               blogUser={blogUser}
             />
           }
+        />
+        <Route
+          path="/blogs/:id"
+          element={<IndividualBlogPage />}
         />
       </Routes>
     </div>

@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import blogService from '../services/blogs'
 import { removeBlog, likeBlog } from '../reducers/blogReducer'
 import { useDispatch, useSelector } from 'react-redux'
+import { Link } from 'react-router-dom'
 
 const Blog = ({ blog /*onClick*/ }) => {
   //on click only for testing
@@ -16,7 +17,7 @@ const Blog = ({ blog /*onClick*/ }) => {
     setBlogVisible(!blogVisible)
   }
 
-  const changeBlog = async (id, changedBlog, blogCreator) => {
+  const changeBlog = (id, changedBlog, blogCreator) => {
     dispatch(
       likeBlog(
         id,
@@ -58,7 +59,9 @@ const Blog = ({ blog /*onClick*/ }) => {
         data-testid="blogheader"
         style={{ fontWeight: 'bold' }}
       >
-        {blog.title} | {blog.author}
+        <Link to={`/blogs/${blog.id}`}>
+          {blog.title} | {blog.author}
+        </Link>
       </span>
       <button onClick={toggleBlogVisibility}>
         {blogVisible ? 'hide' : 'view'}
