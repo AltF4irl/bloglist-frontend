@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from 'react-redux'
 import { setUser } from '../reducers/logedUserReducer'
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom'
-import UserList from './UserList'
+import { Link } from 'react-router-dom'
+import { Navbar, Container, Button, Nav } from 'react-bootstrap'
 
 const LogoutBanner = () => {
   const dispatch = useDispatch()
@@ -12,17 +12,27 @@ const LogoutBanner = () => {
     window.localStorage.removeItem('logedInUser')
   }
 
-  const padding = {
-    paddingRight: '5px',
+  const margin = {
+    marginRight: '5px',
   }
 
   return (
-    <div>
-      <Link to="/" style={padding}>Home</Link>
-      <Link to="/users" style={padding}>Users</Link>
-      Logged in with {user.name}
-      <button onClick={onLogoutClick}>Logout</button>
-    </div>
+    <Navbar className="bg-body-tertiary">
+      <Container>
+        <Navbar.Brand href="#home">Blogs</Navbar.Brand>
+        <Navbar.Toggle />
+        <Nav className="me-auto">
+          <Link style={margin} to="/">Home</Link>
+          <Link style={margin} to="/users">Users</Link>
+        </Nav>
+        <Navbar.Collapse className="justify-content-end">
+          <Navbar.Text>
+            Signed in as: {user.name}
+            <Button onClick={onLogoutClick}>Logout</Button>
+          </Navbar.Text>
+        </Navbar.Collapse>
+      </Container>
+    </Navbar>
   )
 }
 

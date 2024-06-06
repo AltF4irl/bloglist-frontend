@@ -5,6 +5,7 @@ import CommentSection from '../components/CommentSection'
 import { useEffect } from 'react'
 import { getComments } from '../reducers/commentReducer'
 import NotificationBanner from '../components/NotificationBanner'
+import { Button } from 'react-bootstrap'
 
 const IndividualBlogPage = () => {
   const id = useParams().id
@@ -53,7 +54,7 @@ const IndividualBlogPage = () => {
       <div>
         <a href={blog.url}>{blog.url}</a>
         <br />
-        {blog.likes} likes<button onClick={likeHandler}>like</button> <br />
+        {blog.likes} likes<Button variant='outline-dark' onClick={likeHandler}>like</Button> <br />
         Added by {blog.user.name}
       </div>
       <CommentSection />

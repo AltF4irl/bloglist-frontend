@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { createNewBlog } from '../reducers/blogReducer'
 import blogService from '../services/blogs'
+import { Form, Button } from 'react-bootstrap'
 
 const BlogForm = () => {
   const [blogFormVisible, setBlogFormVisible] = useState(false)
@@ -53,50 +54,58 @@ const BlogForm = () => {
   return (
     <div>
       <div style={hideWhenVisible}>
-        <button onClick={toggleBlogFormVisbility}>New Note</button>
+        <Button variant='outline-dark' onClick={toggleBlogFormVisbility}>New Note</Button>
       </div>
       <div style={showWhenVisible}>
         <h1>Create New</h1>
 
-        <form onSubmit={submitBlogHandler}>
-          <div>
-            Title:
-            <input
-              type="text"
+        <Form onSubmit={submitBlogHandler}>
+          <Form.Group>
+            <Form.Label>Title:</Form.Label>
+            <Form.Control 
+              type='text'
+              name='title'
               value={title}
               onChange={({ target }) => setTitle(target.value)}
-              name="Title"
               placeholder="Title"
             />
-          </div>
+          </Form.Group>
 
-          <div>
-            Author:
-            <input
+          <Form.Group>
+          <Form.Label>Author:</Form.Label>
+            <Form.Control
               type="text"
               value={author}
               onChange={({ target }) => setAuthor(target.value)}
               name="Author"
               placeholder="Author"
             />
-          </div>
+          </Form.Group>
 
-          <div>
-            URL:
-            <input
+          <Form.Group>
+          <Form.Label>URL:</Form.Label>
+            <Form.Control
               type="text"
               value={url}
               onChange={({ target }) => setUrl(target.value)}
               name="Url"
               placeholder="Url"
             />
-          </div>
-
+          </Form.Group>
           <br />
-
-          <button type="submit">Create</button>
-        </form>
-        <button onClick={toggleBlogFormVisbility}>Cancel</button>
+          <Button
+            variant="outline-primary"
+            type="submit"
+          >
+            Create
+          </Button>
+          <Button
+            variant="outline-dark"
+            onClick={toggleBlogFormVisbility}
+          >
+            Cancel
+          </Button>
+        </Form>
       </div>
     </div>
   )

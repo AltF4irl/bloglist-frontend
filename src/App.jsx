@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useEffect } from 'react'
 import { setUser } from './reducers/logedUserReducer'
 import { initializeBlogs } from './reducers/blogReducer'
+import { Container } from 'react-bootstrap'
 
 import Userspage from './views/Userspage'
 import LoginForm from './components/LoginForm'
@@ -43,7 +44,7 @@ const App = () => {
   }
 
   return (
-    <div>
+    <Container>
       <LogoutBanner />
       <Routes>
         <Route
@@ -68,7 +69,7 @@ const App = () => {
           element={<IndividualBlogPage />}
         />
       </Routes>
-    </div>
+    </Container>
   )
 }
 

@@ -7,13 +7,13 @@ const notificationSlice = createSlice({
     showNotification(state, action) {
       return {
         message: action.payload,
-        class: 'notif',
+        class: 'success',
       }
     },
     showError(state, action) {
       return {
         message: action.payload,
-        class: 'error',
+        class: 'danger',
       }
     },
     clearNotification(state, action) {

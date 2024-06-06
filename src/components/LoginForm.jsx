@@ -3,12 +3,13 @@ import loginService from '../services/login'
 import { setUser } from '../reducers/logedUserReducer'
 import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { Form, Button, Container } from 'react-bootstrap'
 
 const LoginForm = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
 
-  const notification = useSelector(state => state.notification)
+  const notification = useSelector((state) => state.notification)
 
   const dispatch = useDispatch()
 
@@ -24,35 +25,35 @@ const LoginForm = () => {
   }
 
   return (
-    <div>
+    <Container>
       <h1>Log in to App</h1>
 
       {notification.message !== null && <NotificationBanner />}
 
-      <form onSubmit={onLoginSubmit}>
-        <div>
-          Username
-          <input
+      <Form onSubmit={onLoginSubmit}>
+        <Form.Group>
+          <Form.Label>Username</Form.Label>
+          <Form.Control
             data-testid="username"
             type="text"
             value={username}
             onChange={({ target }) => setUsername(target.value)}
             name="Username"
           />
-        </div>
-        <div>
-          Password
-          <input
+        </Form.Group>
+        <Form.Group>
+          <Form.Label>Password</Form.Label>
+          <Form.Control
             data-testid="password"
             type="password"
             value={password}
             onChange={({ target }) => setPassword(target.value)}
             name="Password"
           />
-        </div>
-        <button type="submit">Login</button>
-      </form>
-    </div>
+        </Form.Group>
+        <Button style={{marginTop: '5px'}} type="submit">Login</Button>
+      </Form>
+    </Container>
   )
 }
 

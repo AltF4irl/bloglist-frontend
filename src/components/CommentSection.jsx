@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
 import commentService from '../services/comments'
 import { createComment } from '../reducers/commentReducer'
+import { Button, Table } from 'react-bootstrap'
 
 const CommentSection = () => {
   const [comment, setComment] = useState('')
@@ -35,13 +36,22 @@ const CommentSection = () => {
           onChange={({ target }) => setComment(target.value)}
           value={comment}
         />
-        <button type="submit">Add Comment</button>
+        <Button
+          type="submit"
+          variant="dark"
+        >
+          Add Comment
+        </Button>
       </form>
-      <ul>
-        {comments.map((comment) => (
-          <li key={comment.id}>{comment.content}</li>
-        ))}
-      </ul>
+      <Table striped>
+        <tbody>
+          {comments.map((comment) => (
+            <tr>
+              <td key={comment.id}>{comment.content}</td>
+            </tr>
+          ))}
+        </tbody>
+      </Table>
     </div>
   )
 }
