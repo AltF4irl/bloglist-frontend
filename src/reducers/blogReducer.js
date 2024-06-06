@@ -1,6 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
 import blogService from '../services/blogs'
-import commentService from '../services/comments'
 import { throwNotification, throwError } from './notificationReducer'
 
 const orderBlogs = (blogs) => {
@@ -30,8 +29,6 @@ const blogSlice = createSlice({
       )
     },
     commentAction(state, action) {
-      console.log('state at comment function', state)
-      console.log(action.payload)
       return state
         .find((blog) => blog.id === action.payload.blogId)
         .comments.concat(action.payload.content)
@@ -103,21 +100,6 @@ export const likeBlog = (id, blog, blogCreator, notification, error) => {
     } catch (err) {
       dispatch(throwError(error))
     }
-  }
-}
-
-export const addComment = (blogId, commentContent) => {
-  return async (dispatch) => {
-    const returnedComment = await commentService.create(blogId, {
-      content: commentContent,
-    })
-    console.log('returned comment', returnedComment)
-    dispatch(
-      commentAction({
-        blogId,
-        content: commentContent,
-      })
-    )
   }
 }
 

@@ -17,12 +17,16 @@ const create = async (blogId, comment) => {
     headers: { Authorization: token },
   }
 
-  const res = await axios.post(`${baseUrl}/${blogId}/comments`, comment, config)
+  const res = await axios.post(
+    `${baseUrl}/${blogId}/comments`,
+    { content: comment },
+    config
+  )
   return res.data
 }
 
 export default {
   getAll,
   create,
-  setToken
+  setToken,
 }

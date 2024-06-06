@@ -1,25 +1,29 @@
 import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
-import { addComment } from '../reducers/blogReducer'
 import commentService from '../services/comments'
-import { throwNotification } from '../reducers/notificationReducer'
+import { createComment } from '../reducers/commentReducer'
 
 const CommentSection = () => {
   const [comment, setComment] = useState('')
   const blogId = useParams().id
   const dispatch = useDispatch()
-  const blog = useSelector((state) =>
-    state.blogs.find((blog) => blog.id === blogId)
-  )
-  const user = useSelector(state => state.logedUser)
+  const user = useSelector((state) => state.logedUser)
+
+  const comments = useSelector((state) => state.comments)
 
   const commentSubmitHandler = (e) => {
     e.preventDefault()
     commentService.setToken(user.token)
-    dispatch(addComment(blogId, comment))
+    dispatch(
+      createComment(
+        blogId,
+        comment,
+        `Comment: ${comment} created!`,
+        'Something went wrong...'
+      )
+    )
     setComment('')
-    // dispatch(throwNotification("comment created!"))
   }
 
   return (
@@ -34,7 +38,7 @@ const CommentSection = () => {
         <button type="submit">Add Comment</button>
       </form>
       <ul>
-        {blog.comments.map((comment) => (
+        {comments.map((comment) => (
           <li key={comment.id}>{comment.content}</li>
         ))}
       </ul>
