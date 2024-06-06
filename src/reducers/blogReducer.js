@@ -28,11 +28,21 @@ const blogSlice = createSlice({
         )
       )
     },
+    commentAction(state, action) {
+      return state
+        .find((blog) => blog.id === action.payload.blogId)
+        .comments.concat(action.payload.content)
+    },
   },
 })
 
-export const { setBlogs, appendBlog, deleteThisBlog, likeAction } =
-  blogSlice.actions
+export const {
+  setBlogs,
+  appendBlog,
+  deleteThisBlog,
+  likeAction,
+  commentAction,
+} = blogSlice.actions
 
 export const initializeBlogs = () => {
   return async (dispatch) => {
